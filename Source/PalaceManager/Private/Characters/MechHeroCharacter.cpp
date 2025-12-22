@@ -3,3 +3,11 @@
 
 #include "Characters/MechHeroCharacter.h"
 
+#include "MechDebugHelper.h"
+
+void AMechHeroCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	Debug::Print(TEXT("WORKING"));
+}

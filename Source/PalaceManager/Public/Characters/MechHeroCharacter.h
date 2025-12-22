@@ -14,4 +14,6 @@ class PALACEMANAGER_API AMechHeroCharacter : public AMechBaseCharacter
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void BeginPlay() override;	
 };
