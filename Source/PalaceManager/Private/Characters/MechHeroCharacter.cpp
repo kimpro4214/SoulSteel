@@ -6,6 +6,10 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "DataAssets/Input/DataAsset_InputConfig.h"
+#include "Components/Input/MechInputComponent.h"
+#include "MechGameplayTags.h"
 
 #include "MechDebugHelper.h"
 
@@ -33,9 +37,45 @@ AMechHeroCharacter::AMechHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
 
+void AMechHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	checkf(InputConfigDataAsset, TEXT("Forgot to assign a valid data asset as input config"));
+	ULocalPlayer* LocalPlayer = GetController<APlayerController>()->GetLocalPlayer();
+	
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer);
+	
+	check(Subsystem);
+	
+	Subsystem->AddMappingContext(InputConfigDataAsset->DefaultMappingContext,0);
+	
+	UMechInputComponent* MechInputComponent = CastChecked<UMechInputComponent>(PlayerInputComponent);
+	
+	MechInputComponent->BindNativeInputAction(InputConfigDataAsset, MechGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this,&ThisClass::Input_Move);
+}
+
+
 void AMechHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	Debug::Print(TEXT("WORKING"));
+}
+
+void AMechHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
+{
+	const FVector2D MovementVector = InputActionValue.Get<FVector2D>();
+	const FRotator MovementRotation(0.f, Controller->GetControlRotation().Yaw, 0.f);
+	
+	if (MovementVector.Y != 0.f)
+	{
+		const FVector ForwardDirection = MovementRotation.RotateVector(FVector::ForwardVector);
+		
+		AddMovementInput(ForwardDirection, MovementVector.Y);
+	}
+	if (MovementVector.X != 0.f)
+	{
+		const FVector RightDirection = MovementRotation.RotateVector(FVector::RightVector);
+		
+		AddMovementInput(RightDirection, MovementVector.X);
+	}
 }
