@@ -51,6 +51,7 @@ void AMechHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	UMechInputComponent* MechInputComponent = CastChecked<UMechInputComponent>(PlayerInputComponent);
 	
 	MechInputComponent->BindNativeInputAction(InputConfigDataAsset, MechGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this,&ThisClass::Input_Move);
+	MechInputComponent->BindNativeInputAction(InputConfigDataAsset, MechGameplayTags::InputTag_Look,ETriggerEvent::Triggered,this,&ThisClass::Input_Look);
 }
 
 
@@ -77,5 +78,20 @@ void AMechHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
 		const FVector RightDirection = MovementRotation.RotateVector(FVector::RightVector);
 		
 		AddMovementInput(RightDirection, MovementVector.X);
+	}
+}
+
+void AMechHeroCharacter::Input_Look(const FInputActionValue& InputActionValue)
+{
+	const FVector2D LookAxisVector = InputActionValue.Get<FVector2D>();
+	
+	if (LookAxisVector.X != 0.f)
+	{
+		AddControllerYawInput(LookAxisVector.X);
+	}
+	
+	if (LookAxisVector.Y != 0.f)
+	{
+		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
