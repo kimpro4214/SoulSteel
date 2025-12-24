@@ -2,6 +2,8 @@
 
 
 #include "Characters/MechBaseCharacter.h"
+#include "AbilitySystem/MechAbilitySystemComponent.h"
+#include "AbilitySystem/MechAttributeSet.h"
 
 // Sets default values
 AMechBaseCharacter::AMechBaseCharacter()
@@ -11,6 +13,25 @@ AMechBaseCharacter::AMechBaseCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	
 	GetMesh()->bReceivesDecals = false;
+	
+	MechAbilitySystemComponent = CreateDefaultSubobject<UMechAbilitySystemComponent>(TEXT("MechAbilitySystemComponent"));
+	
+	MechAttributeSet = CreateDefaultSubobject<UMechAttributeSet>(TEXT("MechAttributeSet"));
+}
+
+UAbilitySystemComponent* AMechBaseCharacter::GetAbilitySystemComponent() const
+{
+	return GetMechAbilitySystemComponent();
+}
+
+void AMechBaseCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	if (MechAbilitySystemComponent)
+	{
+		MechAbilitySystemComponent->InitAbilityActorInfo(this,this);
+	}
 }
 
 

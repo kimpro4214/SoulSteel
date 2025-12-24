@@ -10,8 +10,10 @@
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "Components/Input/MechInputComponent.h"
 #include "MechGameplayTags.h"
+#include "AbilitySystem/MechAbilitySystemComponent.h"
 
 #include "MechDebugHelper.h"
+#include "DynamicMesh/DynamicMesh3.h"
 
 AMechHeroCharacter::AMechHeroCharacter()
 {
@@ -37,6 +39,17 @@ AMechHeroCharacter::AMechHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 }
 
+void AMechHeroCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (MechAbilitySystemComponent && MechAttributeSet)
+	{
+		const FString ASCText = FString::Printf(TEXT("Owner Actor : %s, AvatarActor : %s"), *MechAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *MechAbilitySystemComponent->GetAvatarActor()->GetActorLabel() );
+		Debug::Print(TEXT("Ability System Component Valid") + ASCText,FColor::Green);
+		Debug::Print(TEXT("AttributeSet Valid"),FColor::Green);
+	}
+}
+
 void AMechHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	checkf(InputConfigDataAsset, TEXT("Forgot to assign a valid data asset as input config"));
@@ -58,8 +71,6 @@ void AMechHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void AMechHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	Debug::Print(TEXT("WORKING"));
 }
 
 void AMechHeroCharacter::Input_Move(const FInputActionValue& InputActionValue)
