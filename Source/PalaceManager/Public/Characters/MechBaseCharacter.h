@@ -9,6 +9,7 @@
 
 class UMechAbilitySystemComponent;
 class UMechAttributeSet;
+class UDataAsset_StartUpDataBase;
 UCLASS()
 class PALACEMANAGER_API AMechBaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -18,7 +19,7 @@ public:
 	// Sets default values for this character's properties
 	AMechBaseCharacter();
 	//~ Begin IAbilitySystemInterface Interface
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface Interface
 protected:
 	//~ Begin APawn Interface
@@ -30,6 +31,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UMechAttributeSet* MechAttributeSet;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
+	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartupData;
 public:	
 	FORCEINLINE UMechAbilitySystemComponent* GetMechAbilitySystemComponent() const { return MechAbilitySystemComponent; }
 	

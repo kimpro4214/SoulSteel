@@ -10,6 +10,7 @@
 #include "DataAssets/Input/DataAsset_InputConfig.h"
 #include "Components/Input/MechInputComponent.h"
 #include "MechGameplayTags.h"
+#include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
 
 #include "MechDebugHelper.h"
@@ -42,11 +43,13 @@ AMechHeroCharacter::AMechHeroCharacter()
 void AMechHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	if (MechAbilitySystemComponent && MechAttributeSet)
+	
+	if (!CharacterStartupData.IsNull())
 	{
-		const FString ASCText = FString::Printf(TEXT("Owner Actor : %s, AvatarActor : %s"), *MechAbilitySystemComponent->GetOwnerActor()->GetActorLabel(), *MechAbilitySystemComponent->GetAvatarActor()->GetActorLabel() );
-		Debug::Print(TEXT("Ability System Component Valid") + ASCText,FColor::Green);
-		Debug::Print(TEXT("AttributeSet Valid"),FColor::Green);
+		if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartupData.LoadSynchronous())
+		{
+			LoadedData->GiveToAbilitySystemComponent(MechAbilitySystemComponent);
+		}
 	}
 }
 

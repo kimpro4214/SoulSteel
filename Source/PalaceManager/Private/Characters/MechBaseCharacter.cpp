@@ -31,6 +31,8 @@ void AMechBaseCharacter::PossessedBy(AController* NewController)
 	if (MechAbilitySystemComponent)
 	{
 		MechAbilitySystemComponent->InitAbilityActorInfo(this,this);
+		
+ 		ensureMsgf(!CharacterStartupData.IsNull(), TEXT("forgot to assign start up data to %s"), *GetName());
 	}
 }
 
