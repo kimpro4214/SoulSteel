@@ -11,6 +11,7 @@
 #include "Components/Input/MechInputComponent.h"
 #include "MechGameplayTags.h"
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
+#include "Components/Combat/HeroCombatComponent.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
 
 #include "MechDebugHelper.h"
@@ -38,6 +39,8 @@ AMechHeroCharacter::AMechHeroCharacter()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f);
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
+	
+	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
 void AMechHeroCharacter::PossessedBy(AController* NewController)
