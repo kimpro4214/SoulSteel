@@ -6,6 +6,8 @@
 #include "Abilities/GameplayAbility.h"
 #include "MechGameplayAbility.generated.h"
 
+class UPawnCombatComponent;
+
 UENUM(BlueprintType)
 enum class EMechAbilityActivationPolicy : uint8
 {
@@ -27,4 +29,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category= "MechAbility")
 	EMechAbilityActivationPolicy AbilityActivationPolicy = EMechAbilityActivationPolicy::OnTriggered;
+	
+	UFUNCTION(BlueprintPure, Category = "Mech|Ability")
+	UPawnCombatComponent* GetPawnCombatComponentFromActorInfo() const;
 };

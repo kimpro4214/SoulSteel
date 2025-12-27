@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/PawnExtensionComponentBase.h"
+#include "GameplayTagContainer.h"
 #include "PawnCombatComponent.generated.h"
 
+class AMechWeaponBase;
 /**
  * 
  */
@@ -13,5 +15,19 @@ UCLASS()
 class PALACEMANAGER_API UPawnCombatComponent : public UPawnExtensionComponentBase
 {
 	GENERATED_BODY()
+public:
+	UFUNCTION(BlueprintCallable, Category= "Mech|Combat")
+	void RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister, AMechWeaponBase* InWeaponToRegister, bool bRegisterAsEquippedWeapon = false);
+
+	UFUNCTION(BlueprintCallable, Category= "Mech|Combat")
+	AMechWeaponBase* GetCharacterCarriedWeaponByTag(FGameplayTag InWeaponTagToGet) const;
 	
+	UPROPERTY(BlueprintReadWrite, Category= "Mech|Combat")
+	FGameplayTag CurrentEquippedWeaponTag;
+	
+	UFUNCTION(BlueprintCallable, Category= "Mech|Combat")
+	AMechWeaponBase* GetCharacterCurrentEquippedWeapon() const;
+	
+private:
+	TMap<FGameplayTag, AMechWeaponBase*> CharacterCarriedWeaponMap;
 };
