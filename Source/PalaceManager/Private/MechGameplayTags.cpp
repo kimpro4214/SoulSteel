@@ -13,4 +13,7 @@ namespace MechGameplayTags
 
 	/** Player Tags **/
 	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_Punch, "Player.Weapon.Punch");
+	
+	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Equip_Punch, "Player.Event.Equip.Punch");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Unequip_Punch, "Player.Event.Unequip.Punch");
 }

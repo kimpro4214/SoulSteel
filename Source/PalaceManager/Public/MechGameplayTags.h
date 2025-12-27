@@ -14,4 +14,8 @@ namespace MechGameplayTags
 	
 	/** Player Tags **/
 	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Weapon_Punch);
+	
+	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_Equip_Punch);
+	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Player_Event_Unequip_Punch);
+
 }
