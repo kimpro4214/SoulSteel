@@ -71,7 +71,8 @@ void AMechHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	
 	MechInputComponent->BindNativeInputAction(InputConfigDataAsset, MechGameplayTags::InputTag_Move,ETriggerEvent::Triggered,this,&ThisClass::Input_Move);
 	MechInputComponent->BindNativeInputAction(InputConfigDataAsset, MechGameplayTags::InputTag_Look,ETriggerEvent::Triggered,this,&ThisClass::Input_Look);
-
+	MechInputComponent->BindNativeInputAction(InputConfigDataAsset, MechGameplayTags::InputTag_Jump, ETriggerEvent::Started, this, &ThisClass::Input_Jump);
+	
 	MechInputComponent->BindAbilityInputAction(InputConfigDataAsset,this, &ThisClass::Input_AbilityInputPressed, &ThisClass::Input_AbilityInputReleased);
 }
 
@@ -123,4 +124,9 @@ void AMechHeroCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)
 void AMechHeroCharacter::Input_AbilityInputReleased(FGameplayTag InInputTag)
 {
 	MechAbilitySystemComponent->OnAbilityInputReleased(InInputTag);
+}
+
+void AMechHeroCharacter::Input_Jump(const FInputActionValue& InputActionValue)
+{
+	Jump();
 }
