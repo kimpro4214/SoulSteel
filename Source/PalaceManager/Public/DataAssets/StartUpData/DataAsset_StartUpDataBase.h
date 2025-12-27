@@ -17,6 +17,7 @@ class PALACEMANAGER_API UDataAsset_StartUpDataBase : public UDataAsset
 	GENERATED_BODY()
 public:
 	virtual void GiveToAbilitySystemComponent(UMechAbilitySystemComponent* InASCToGive, int32 ApplyLevel = 1);
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "StartUpData")
 	TArray<TSubclassOf<UMechGameplayAbility>> ActivateOnGivenAbilities;
