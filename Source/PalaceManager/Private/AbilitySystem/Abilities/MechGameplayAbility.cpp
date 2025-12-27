@@ -38,4 +38,9 @@ UPawnCombatComponent* UMechGameplayAbility::GetPawnCombatComponentFromActorInfo(
 	return GetAvatarActorFromActorInfo()->FindComponentByClass<UPawnCombatComponent>();
 }
 
+UMechAbilitySystemComponent* UMechGameplayAbility::GetMechAbilitySystemComponentFromActorInfo() const
+{
+	return Cast<UMechAbilitySystemComponent>(CurrentActorInfo->AbilitySystemComponent);
+}
+
 
