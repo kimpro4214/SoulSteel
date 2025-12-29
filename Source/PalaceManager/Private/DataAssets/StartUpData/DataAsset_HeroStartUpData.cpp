@@ -2,4 +2,27 @@
 
 
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
+#include "AbilitySystem/Abilities/MechGameplayAbility.h"
+#include "AbilitySystem/MechAbilitySystemComponent.h"
 
+bool FMechHeroAbilitySet::IsValid() const
+{
+	return InputTag.IsValid() && AbilityToGrant;
+}
+
+void UDataAsset_HeroStartUpData::GiveToAbilitySystemComponent(UMechAbilitySystemComponent* InASCToGive,
+	int32 ApplyLevel)
+{
+	Super::GiveToAbilitySystemComponent(InASCToGive, ApplyLevel);
+	for (const FMechHeroAbilitySet& AbilitySet : HeroStartAbilitySets)
+	{
+		if (!AbilitySet.IsValid()) continue;
+		
+		FGameplayAbilitySpec AbilitySpec(AbilitySet.AbilityToGrant);
+		AbilitySpec.SourceObject = InASCToGive->GetAvatarActor();
+		AbilitySpec.Level = ApplyLevel;
+		AbilitySpec.DynamicAbilityTags.AddTag(AbilitySet.InputTag);
+		
+		InASCToGive->GiveAbility(AbilitySpec);
+	}
+}
