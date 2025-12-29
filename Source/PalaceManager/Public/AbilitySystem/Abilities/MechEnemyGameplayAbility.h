@@ -6,6 +6,8 @@
 #include "AbilitySystem/Abilities/MechGameplayAbility.h"
 #include "MechEnemyGameplayAbility.generated.h"
 
+class AMechEnemyCharacter;
+class UEnemyCombatComponent;
 /**
  * 
  */
@@ -13,5 +15,13 @@ UCLASS()
 class PALACEMANAGER_API UMechEnemyGameplayAbility : public UMechGameplayAbility
 {
 	GENERATED_BODY()
+public:
+	UFUNCTION(BlueprintPure, Category = "Mech|Ability")
+	AMechEnemyCharacter* GetEnemyCharacterFromActorInfo();
 	
+	UFUNCTION(BlueprintPure, Category = "Mech|Ability")
+	UEnemyCombatComponent* GetEnemyCombatComponentFromActorInfo();
+	
+private:
+	TWeakObjectPtr<AMechEnemyCharacter> CachedMechEnemyCharacter;
 };
