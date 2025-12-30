@@ -47,8 +47,6 @@ void AMechEnemyCharacter::InitEnemyStartUpData()
 				if (UDataAsset_StartUpDataBase* LoadedData = CharacterStartupData.Get())
 				{
 					LoadedData->GiveToAbilitySystemComponent(MechAbilitySystemComponent);
-					
-					Debug::Print(TEXT("Enemy startupdata loaded"),FColor::Green );
 				}
 			}
 		)
