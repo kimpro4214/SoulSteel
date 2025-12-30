@@ -26,7 +26,7 @@ void UMechFunctionLibrary::RemoveGameplayFromActorIfFound(AActor* InActor, FGame
 {
 	UMechAbilitySystemComponent* ASC = NativeGetMechASCFromActor(InActor);
 	
-	if (!ASC->HasMatchingGameplayTag(TagToRemove))
+	if (ASC->HasMatchingGameplayTag(TagToRemove))
 	{
 		ASC->RemoveLooseGameplayTag(TagToRemove);
 	}
