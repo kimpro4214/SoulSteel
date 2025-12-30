@@ -43,6 +43,11 @@ AMechHeroCharacter::AMechHeroCharacter()
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
 }
 
+UPawnCombatComponent* AMechHeroCharacter::GetPawnCombatComponent() const
+{
+	return HeroCombatComponent;
+}
+
 void AMechHeroCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);

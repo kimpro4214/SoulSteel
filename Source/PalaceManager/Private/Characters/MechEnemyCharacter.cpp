@@ -54,3 +54,8 @@ void AMechEnemyCharacter::InitEnemyStartUpData()
 		)
 	);
 }
+
+UPawnCombatComponent* AMechEnemyCharacter::GetPawnCombatComponent() const
+{
+	return EnemyCombatComponent;
+}
