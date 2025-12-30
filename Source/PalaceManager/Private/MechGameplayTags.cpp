@@ -14,9 +14,6 @@ namespace MechGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_LightAttack_Punch, "InputTag.LightAttack.Punch");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_HeavyAttack_Punch, "InputTag.HeavyAttack.Punch");
 
-	
-	
-
 	/** Player Tags **/
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Equip_Punch, "Player.Ability.Equip.Punch");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Unequip_Punch, "Player.Ability.Unequip.Punch");
@@ -24,7 +21,13 @@ namespace MechGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Attack_Heavy_Punch, "Player.Ability.Attack.Heavy.Punch");
 
 	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_Punch, "Player.Weapon.Punch");
+	UE_DEFINE_GAMEPLAY_TAG(Player_Weapon_PunchSecondary, "Player.Weapon.PunchSecondary");
 	
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Equip_Punch, "Player.Event.Equip.Punch");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Unequip_Punch, "Player.Event.Unequip.Punch");
+	
+	/** Enemy Tags **/
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Weapon, "Enemy.Weapon");
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_WeaponSecondary, "Enemy.WeaponSecondary");
+
 }
