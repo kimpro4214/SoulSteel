@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "Interfaces/PawnCombatInterface.h"
 #include "MechBaseCharacter.generated.h"
 
 class UMechAbilitySystemComponent;
 class UMechAttributeSet;
 class UDataAsset_StartUpDataBase;
 UCLASS()
-class PALACEMANAGER_API AMechBaseCharacter : public ACharacter, public IAbilitySystemInterface
+class PALACEMANAGER_API AMechBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface
 {
 	GENERATED_BODY()
 
@@ -21,6 +22,11 @@ public:
 	//~ Begin IAbilitySystemInterface Interface
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	//~ End IAbilitySystemInterface Interface
+	
+	//~ Begin IPawnCombatInterface Interface
+	virtual UPawnCombatComponent* GetPawnCombatComponent() const override;
+	//~ End IPawnCombatInterface Interface
+
 protected:
 	//~ Begin APawn Interface
 	virtual void PossessedBy(AController* NewController) override;
