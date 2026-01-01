@@ -7,6 +7,9 @@
 #include "MechWeaponBase.generated.h"
 
 class UBoxComponent;
+
+DECLARE_DELEGATE_OneParam(FOnTargetInteractedDelegate, AActor*);
+
 UCLASS()
 class PALACEMANAGER_API AMechWeaponBase : public AActor
 {
@@ -15,6 +18,8 @@ class PALACEMANAGER_API AMechWeaponBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AMechWeaponBase();
+	FOnTargetInteractedDelegate OnWeaponHitTarget;
+	FOnTargetInteractedDelegate OnWeaponPulledFromTarget;
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapons")
 	UStaticMeshComponent* WeaponMesh;
