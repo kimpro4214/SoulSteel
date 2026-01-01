@@ -4,21 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "MechTypes/MechStructType.h"
 #include "MechFunctionLibrary.generated.h"
 
-UENUM()
-enum class EMechConfirmType : uint8
-{
-	Yes,
-	No
-};
-
-UENUM()
-enum class EMechValidType : uint8
-{
-	Valid,
-	Invalid
-};
 
 class UMechAbilitySystemComponent;
 class UPawnCombatComponent;

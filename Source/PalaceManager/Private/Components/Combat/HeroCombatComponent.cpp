@@ -6,6 +6,17 @@
 #include "MechGameplayTags.h"
 
 #include "MechDebugHelper.h"
+#include "Items/Weapons/MechHeroWeapon.h"
+
+AMechHeroWeapon* UHeroCombatComponent::GetHeroCurrentEquippedWeapon() const
+{	
+	return Cast<AMechHeroWeapon>(GetCharacterCurrentEquippedWeapon());
+}
+
+float UHeroCombatComponent::GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const
+{
+	return GetHeroCurrentEquippedWeapon()->HeroWeaponData.WeaponBaseDamage.GetValueAtLevel(InLevel);
+}
 
 void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
@@ -32,3 +43,5 @@ void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor
 	Debug::Print(GetOwningPawn()->GetActorNameOrLabel() + TEXT("s weapon pulled from ") + InteractedActor->GetActorNameOrLabel(),FColor::Red);
 	Super::OnWeaponPulledFromTargetActor(InteractedActor);
 }
+
+
