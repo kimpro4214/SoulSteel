@@ -2,13 +2,29 @@
 
 
 #include "Components/Combat/HeroCombatComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "MechGameplayTags.h"
 
 #include "MechDebugHelper.h"
 
 void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
-	Debug::Print(GetOwningPawn()->GetActorNameOrLabel() + TEXT("hit") + HitActor->GetActorNameOrLabel(),FColor::Green);
-	Super::OnHitTargetActor(HitActor);
+	if (OverlappedActors.Contains(HitActor))
+	{
+		return;
+	}
+
+	OverlappedActors.AddUnique(HitActor);
+
+	FGameplayEventData Data;
+	Data.Instigator = GetOwningPawn();
+	Data.Target = HitActor;
+
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		GetOwningPawn(),
+		MechGameplayTags::Shared_Event_MeleeHit,
+		Data
+	);
 }
 
 void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)

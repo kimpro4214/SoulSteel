@@ -64,9 +64,9 @@
 	    {
 	    	WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	    	OverlappedActors.Empty();
 	    }
  	}
- 	//todo : Handle body collision boxes
  }
 
  void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)

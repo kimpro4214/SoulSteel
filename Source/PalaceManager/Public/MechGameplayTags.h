@@ -30,5 +30,8 @@ namespace MechGameplayTags
 	/** Enemy Tags **/
 	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_Weapon);
 	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Enemy_WeaponSecondary);
+	
+	/** Shared tags **/
+	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_MeleeHit);
 
 }
