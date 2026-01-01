@@ -33,5 +33,6 @@ namespace MechGameplayTags
 	
 	/** Shared tags **/
 	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_Event_MeleeHit);
+	PALACEMANAGER_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Shared_SetByCaller_BaseDamage);
 
 }
