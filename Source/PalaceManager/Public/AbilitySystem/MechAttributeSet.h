@@ -23,6 +23,8 @@ class PALACEMANAGER_API UMechAttributeSet : public UAttributeSet
 public:
 	UMechAttributeSet();
 	
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData &Data) override;
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Health")
 	FGameplayAttributeData CurrentHealth;
 	ATTRIBUTE_ACCESSORS(UMechAttributeSet, CurrentHealth)
@@ -46,4 +48,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Damage")
 	FGameplayAttributeData DefensePower;
 	ATTRIBUTE_ACCESSORS(UMechAttributeSet, DefensePower)
+	
+	UPROPERTY(BlueprintReadOnly, Category = "Damage")
+	FGameplayAttributeData DamageTaken;
+	ATTRIBUTE_ACCESSORS(UMechAttributeSet,DamageTaken)
 };

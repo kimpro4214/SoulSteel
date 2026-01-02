@@ -3,3 +3,6 @@
 
 #include "Items/Weapons/MechHeroWeapon.h"
 
+AMechHeroWeapon::AMechHeroWeapon()
+{
+}

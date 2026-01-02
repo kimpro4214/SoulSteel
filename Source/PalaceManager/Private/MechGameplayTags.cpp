@@ -26,8 +26,21 @@ namespace MechGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Equip_Punch, "Player.Event.Equip.Punch");
 	UE_DEFINE_GAMEPLAY_TAG(Player_Event_Unequip_Punch, "Player.Event.Unequip.Punch");
 	
+	UE_DEFINE_GAMEPLAY_TAG(Player_SetByCaller_AttackType_Light,"Player.SetByCaller.AttackType.Light");
+	UE_DEFINE_GAMEPLAY_TAG(Player_SetByCaller_AttackType_Heavy,"Player.SetByCaller.AttackType.Heavy");
+	
 	/** Enemy Tags **/
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Ability_Melee,"Enemy.Ability.Melee");
+	UE_DEFINE_GAMEPLAY_TAG(Enemy_Ability_Ranged,"Enemy.Ability.Ranged");
+	
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_Weapon, "Enemy.Weapon");
 	UE_DEFINE_GAMEPLAY_TAG(Enemy_WeaponSecondary, "Enemy.WeaponSecondary");
+	
+	/** Shared tags **/
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Ability_HitReact,"Shared.Ability.HitReact");
+	
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_MeleeHit,"Shared.Event.MeleeHit");
+	UE_DEFINE_GAMEPLAY_TAG(Shared_Event_HitReact,"Shared.Event.HitReact");
+	UE_DEFINE_GAMEPLAY_TAG(Shared_SetByCaller_BaseDamage,"Shared.SetByCaller.BaseDamage");
 
 }

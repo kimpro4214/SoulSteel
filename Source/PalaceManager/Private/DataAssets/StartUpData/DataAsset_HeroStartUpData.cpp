@@ -2,7 +2,7 @@
 
 
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
-#include "AbilitySystem/Abilities/MechGameplayAbility.h"
+#include "AbilitySystem/Abilities/MechHeroGameplayAbility.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
 
 bool FMechHeroAbilitySet::IsValid() const

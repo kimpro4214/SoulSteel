@@ -14,4 +14,14 @@ class PALACEMANAGER_API UHeroCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
 	
+public:
+	
+	UFUNCTION(BlueprintCallable, Category = "Mech|Combat")
+	AMechHeroWeapon* GetHeroCurrentEquippedWeapon() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Mech|Combat")
+	float GetHeroCurrentEquippWeaponDamageAtLevel(float InLevel) const;
+	
+	virtual void OnHitTargetActor(AActor* HitActor) override;
+	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor) override;
 };

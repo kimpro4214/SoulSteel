@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "MechTypes/MechStructType.h"
 #include "MechGameplayAbility.generated.h"
 
 class UPawnCombatComponent;
@@ -36,4 +37,9 @@ protected:
 	
 	UFUNCTION(BlueprintPure, Category = "Mech|Ability")
 	UMechAbilitySystemComponent* GetMechAbilitySystemComponentFromActorInfo() const;
+	
+	FActiveGameplayEffectHandle NativeApplyEffectSpecHandleToTarget(AActor* TargetActor,const FGameplayEffectSpecHandle& InSpecHandle);
+
+	UFUNCTION(BlueprintCallable, Category = "Mech|Ability", meta = (DisplayName = "Apply Gameplay Effect Spec Handle To Target Actor", ExpandEnumAsExecs = "OutSuccessType"))
+	FActiveGameplayEffectHandle BP_ApplyEffectSpecHandleToTarget(AActor* TargetActor,const FGameplayEffectSpecHandle& InSpecHandle,EMechSuccessType& OutSuccessType);
 };

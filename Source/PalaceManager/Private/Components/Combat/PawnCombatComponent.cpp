@@ -15,6 +15,9 @@
  	
  	CharacterCarriedWeaponMap.Emplace(InWeaponTagToRegister, InWeaponToRegister);
  	
+ 	InWeaponToRegister->OnWeaponHitTarget.BindUObject(this, &ThisClass::OnHitTargetActor);
+ 	InWeaponToRegister->OnWeaponPulledFromTarget.BindUObject(this, &ThisClass::OnWeaponPulledFromTargetActor);
+ 	
  	if (bRegisterAsEquippedWeapon)
  	{
  		CurrentEquippedWeaponTag = InWeaponTagToRegister;
@@ -61,7 +64,15 @@
 	    {
 	    	WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
+	    	OverlappedActors.Empty();
 	    }
  	}
- 	//todo : Handle body collision boxes
+ }
+
+ void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
+ {
+ }
+
+ void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+ {
  }
