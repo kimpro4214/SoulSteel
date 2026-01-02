@@ -3,16 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameplayTagContainer.h" // FGameplayTag를 쓰기 위해 필요
-#include "ScalableFloat.h"        // FScalableFloat를 쓰기 위해 필요
+#include "GameplayTagContainer.h" 
+#include "ScalableFloat.h"        
 #include "MechStructType.generated.h"
 
-// --- 전방 선언 (Forward Declarations) ---
-// 아직 헤더를 include 하지 않아도 클래스가 있다고 알려주는 역할입니다.
-// 강의의 WarriorHero... 클래스들을 본인의 Mech 클래스 이름으로 맞춰야 합니다.
-class UMechHeroLinkedAnimLayer;     // (가정) 애니메이션 레이어 클래스
-class UMechHeroGameplayAbility;     // (가정) 어빌리티 클래스
-class UInputMappingContext;         // 입력 매핑 컨텍스트
+class UMechHeroLinkedAnimLayer;     
+class UMechHeroGameplayAbility;     
+class UInputMappingContext;         
 
 // --- ENUM 정의 ---
 
@@ -30,6 +27,14 @@ enum class EMechValidType : uint8
 	Invalid
 };
 
+
+UENUM()
+enum class EMechSuccessType : uint8
+{
+	Successful,
+	Failed
+};
+
 // --- STRUCT 정의 ---
 
 /**
@@ -45,9 +50,9 @@ struct FMechHeroAbilitySet
 	FGameplayTag InputTag;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UMechHeroGameplayAbility> AbilityToGrant; // 본인의 어빌리티 클래스 이름으로 변경 필요
+	TSubclassOf<UMechHeroGameplayAbility> AbilityToGrant; 
 
-	bool IsValid() const; // .cpp 파일에서 구현 필요
+	bool IsValid() const; 
 };
 
 /**
@@ -59,13 +64,13 @@ struct FMechHeroWeaponData
 	GENERATED_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<UMechHeroLinkedAnimLayer> WeaponAnimLayerToLink; // 본인의 AnimLayer 클래스 이름으로 변경 필요
+	TSubclassOf<UMechHeroLinkedAnimLayer> WeaponAnimLayerToLink; 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	UInputMappingContext* WeaponInputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (TitleProperty = "InputTag"))
-	TArray<FMechHeroAbilitySet> DefaultWeaponAbilities; // 위에서 만든 구조체를 배열로 사용
+	TArray<FMechHeroAbilitySet> DefaultWeaponAbilities; 
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FScalableFloat WeaponBaseDamage;
