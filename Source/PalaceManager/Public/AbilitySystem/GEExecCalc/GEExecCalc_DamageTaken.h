@@ -14,4 +14,7 @@ class PALACEMANAGER_API UGEExecCalc_DamageTaken : public UGameplayEffectExecutio
 {
 	GENERATED_BODY()
 	
+public:
+	UGEExecCalc_DamageTaken();
+	
 };
