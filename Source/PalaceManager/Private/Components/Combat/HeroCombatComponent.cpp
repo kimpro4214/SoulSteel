@@ -48,7 +48,7 @@ void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor
 {
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
 		GetOwningPawn(),
-		MechGameplayTags::Player_Event_HitPause,
+		MechGameplayTags::Player_Event_HitPause, 
 		FGameplayEventData()
 	);
 }
