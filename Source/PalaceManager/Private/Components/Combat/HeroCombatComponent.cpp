@@ -36,12 +36,21 @@ void UHeroCombatComponent::OnHitTargetActor(AActor* HitActor)
 		MechGameplayTags::Shared_Event_MeleeHit,
 		Data
 	);
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		GetOwningPawn(),
+		MechGameplayTags::Player_Event_HitPause,
+		FGameplayEventData()
+	);
 }
 
 void UHeroCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
 {
-	Debug::Print(GetOwningPawn()->GetActorNameOrLabel() + TEXT("s weapon pulled from ") + InteractedActor->GetActorNameOrLabel(),FColor::Red);
-	Super::OnWeaponPulledFromTargetActor(InteractedActor);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(
+		GetOwningPawn(),
+		MechGameplayTags::Player_Event_HitPause,
+		FGameplayEventData()
+	);
 }
 
 
