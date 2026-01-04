@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/MechAttributeSet.h"
 #include "GameplayEffectExtension.h"
+#include "MechFunctionLibrary.h"
+#include "MechGameplayTags.h"
 
 #include "MechDebugHelper.h"
 
@@ -55,7 +57,7 @@ void UMechAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		//TODO::Handle character death
 		if (NewCurrentHealth == 0.f)
 		{
-
+			UMechFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),MechGameplayTags::Shared_Status_Dead);
 		}
 	}
 	
