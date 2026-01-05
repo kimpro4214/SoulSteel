@@ -7,6 +7,8 @@
 #include "DataAssets/StartUpData/DataAsset_StartUpDataBase.h"
 #include "Engine/AssetManager.h"
 #include "Components/UI/EnemyUIComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Widgets/MechWidgetBase.h"
 #include "DataAssets/StartUpData/DataAsset_EnemyStartUpData.h"
 
 #include "MechDebugHelper.h"
@@ -27,6 +29,9 @@ AMechEnemyCharacter::AMechEnemyCharacter()
 	EnemyCombatComponent = CreateDefaultSubobject<UEnemyCombatComponent>("EnemyCombatComponent");
 	
 	EnemyUIComponent = CreateDefaultSubobject<UEnemyUIComponent>("EnemyUIComponent");
+	
+	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("EnemyHealthWidgetComponent");
+	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
 }
 
 void AMechEnemyCharacter::PossessedBy(AController* NewController)
@@ -69,4 +74,14 @@ UPawnUIComponent* AMechEnemyCharacter::GetPawnUIComponent() const
 UEnemyUIComponent* AMechEnemyCharacter::GetEnemyUIComponent() const
 {
 	return EnemyUIComponent;
+}
+
+void AMechEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	if (UMechWidgetBase* HealthWidget = Cast<UMechWidgetBase>(EnemyHealthWidgetComponent->GetUserWidgetObject()))
+	{
+		HealthWidget->InitEnemyCreatedWidget(this);
+	}
 }
