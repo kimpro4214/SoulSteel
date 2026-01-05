@@ -18,6 +18,14 @@ void UMechWidgetBase::NativeOnInitialized()
 	}
 }
 
+void UMechWidgetBase::InitHeroWidget(UHeroUIComponent* HeroUIComponent)
+{
+	if (HeroUIComponent)
+	{
+		BP_OnOwningHeroUIComponentInitialized(HeroUIComponent);
+	}
+}
+
 void UMechWidgetBase::InitEnemyCreatedWidget(AActor* OwningEnemyActor)
 {
 	if (IPawnUIInterface* PawnUIInterface = Cast<IPawnUIInterface>(OwningEnemyActor))
