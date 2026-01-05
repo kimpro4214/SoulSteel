@@ -6,6 +6,9 @@
 #include "AIController.h"
 #include "MechAIController.generated.h"
 
+
+class UAIPerceptionComponent;
+class UAISenseConfig_Sight;
 /**
  * 
  */
@@ -16,5 +19,14 @@ class PALACEMANAGER_API AMechAIController : public AAIController
 	
 public:
 	AMechAIController(const FObjectInitializer& ObjectInitializer);
-	
+
+protected:
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UAIPerceptionComponent* EnemyPerceptionComponent;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	UAISenseConfig_Sight* AISenseConfig_Sight;
+
+	UFUNCTION()
+	virtual void OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);	
 };
