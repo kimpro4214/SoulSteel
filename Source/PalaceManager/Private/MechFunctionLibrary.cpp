@@ -5,6 +5,7 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
 #include "Interfaces/PawnCombatInterface.h"
+#include "GenericTeamAgentInterface.h"
 
 UMechAbilitySystemComponent* UMechFunctionLibrary::NativeGetMechASCFromActor(AActor* InActor)
 {
@@ -64,4 +65,19 @@ UPawnCombatComponent* UMechFunctionLibrary::BP_GetPawnCombatComponentFromActor(A
 	OutValidType = CombatComponent? EMechValidType::Valid : EMechValidType::Invalid;
 	
 	return CombatComponent;
+}
+
+bool UMechFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPawn)
+{
+	check(QueryPawn && TargetPawn);
+
+	IGenericTeamAgentInterface* QueryTeamAgent = Cast<IGenericTeamAgentInterface>(QueryPawn->GetController());
+	IGenericTeamAgentInterface* TargetTeamAgent = Cast<IGenericTeamAgentInterface>(TargetPawn->GetController());
+
+	if (QueryTeamAgent && TargetTeamAgent)
+	{
+		return QueryTeamAgent->GetGenericTeamId() != TargetTeamAgent->GetGenericTeamId();
+	}
+
+	return false;
 }
