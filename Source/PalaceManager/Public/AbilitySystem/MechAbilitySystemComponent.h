@@ -18,4 +18,6 @@ public:
 	void OnAbilityInputPressed(const FGameplayTag& InInputTag);	
 	void OnAbilityInputReleased(const FGameplayTag& InInputTag);	
 
+	UFUNCTION(BlueprintCallable, Category = "Mech|Ability")
+	bool TryActivateAbilityByTag(FGameplayTag AbilityTagToActivate);
 };
