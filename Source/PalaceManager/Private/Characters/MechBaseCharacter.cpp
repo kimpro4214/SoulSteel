@@ -29,6 +29,11 @@ UPawnCombatComponent* AMechBaseCharacter::GetPawnCombatComponent() const
 	return nullptr;
 }
 
+UPawnUIComponent* AMechBaseCharacter::GetPawnUIComponent() const
+{
+	return nullptr;
+}
+
 void AMechBaseCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
