@@ -37,6 +37,11 @@ class PALACEMANAGER_API UBTTask_RotateToFaceTarget : public UBTTaskNode
 	virtual uint16 GetInstanceMemorySize() const override;
 	virtual FString GetStaticDescription() const override;
 	//~ End UBTNode Interface
+	
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	
+	bool HasReachedAnglePrecision(APawn* QueryPawn,AActor* TargetActor) const;
 
 	UPROPERTY(EditAnywhere, Category = "Face Target")
 	float AnglePrecision;
