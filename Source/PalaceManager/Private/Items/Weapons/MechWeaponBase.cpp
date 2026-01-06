@@ -33,7 +33,7 @@ void AMechWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* Overlapped
 	{
 		if (WeaponOwningPawn != HitPawn)
 		{
-			Debug::Print(GetName() + TEXT("begin overlap with ") + HitPawn->GetName(), FColor::Green);
+			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
 		
 		/**todo : implement hit check for enemy characters **/
@@ -51,7 +51,7 @@ void AMechWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedCo
 	{
 		if (WeaponOwningPawn != HitPawn)
 		{
-			Debug::Print(GetName() + TEXT("end overlap with ") + HitPawn->GetName(), FColor::Red);
+			OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
 		}
 		
 		/**todo : implement hit check for enemy characters **/

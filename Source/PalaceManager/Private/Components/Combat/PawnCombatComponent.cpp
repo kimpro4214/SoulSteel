@@ -6,14 +6,18 @@
 #include "Components/BoxComponent.h"
 
 #include "MechDebugHelper.h"
+#include "MechGameplayTags.h"
 
  void UPawnCombatComponent::RegisterSpawnedWeapon(FGameplayTag InWeaponTagToRegister,
-	 AMechWeaponBase* InWeaponToRegister, bool bRegisterAsEquippedWeapon)
+                                                  AMechWeaponBase* InWeaponToRegister, bool bRegisterAsEquippedWeapon)
  {
  	checkf(!CharacterCarriedWeaponMap.Contains(InWeaponTagToRegister), TEXT("A named named %s has already been added as carried weapon"), *InWeaponTagToRegister.ToString());
 	check(InWeaponToRegister);
  	
  	CharacterCarriedWeaponMap.Emplace(InWeaponTagToRegister, InWeaponToRegister);
+ 	
+ 	InWeaponToRegister->OnWeaponHitTarget.BindUObject(this, &ThisClass::OnHitTargetActor);
+ 	InWeaponToRegister->OnWeaponPulledFromTarget.BindUObject(this, &ThisClass::OnWeaponPulledFromTargetActor);
  	
  	if (bRegisterAsEquippedWeapon)
  	{
@@ -45,23 +49,41 @@
  	return GetCharacterCarriedWeaponByTag(CurrentEquippedWeaponTag);
  }
 
- void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
  {
+ 	AMechWeaponBase* WeaponToToggle = nullptr;
+
  	if (ToggleDamageType == EToggleDamageType::CurrentEquippedWeapon)
  	{
- 		AMechWeaponBase* WeaponToToggle = GetCharacterCurrentEquippedWeapon();
- 		
- 		check(WeaponToToggle);
- 		
+ 		WeaponToToggle = GetCharacterCurrentEquippedWeapon();
+ 	}
+ 	else if (ToggleDamageType == EToggleDamageType::LeftHand)
+ 	{
+ 		WeaponToToggle = GetCharacterCarriedWeaponByTag(MechGameplayTags::Player_Weapon_PunchSecondary);
+ 	}
+ 	else if (ToggleDamageType == EToggleDamageType::RightHand)
+ 	{
+ 		WeaponToToggle = GetCharacterCarriedWeaponByTag(MechGameplayTags::Player_Weapon_Punch);
+ 	}
+
+ 	if (WeaponToToggle && WeaponToToggle->GetWeaponCollisionBox())
+ 	{
  		if (bShouldEnable)
  		{
  			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
  		}
-	    else
-	    {
-	    	WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
-	    }
+ 		else
+ 		{
+ 			WeaponToToggle->GetWeaponCollisionBox()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+ 			OverlappedActors.Empty();
+ 		}
  	}
- 	//todo : Handle body collision boxes
+ }
+
+ void UPawnCombatComponent::OnHitTargetActor(AActor* HitActor)
+ {
+ }
+
+ void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
+ {
  }

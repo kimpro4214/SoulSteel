@@ -13,6 +13,7 @@
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
+#include "Components/UI/HeroUIComponent.h"
 
 #include "MechDebugHelper.h"
 #include "DynamicMesh/DynamicMesh3.h"
@@ -41,11 +42,22 @@ AMechHeroCharacter::AMechHeroCharacter()
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	
 	HeroCombatComponent = CreateDefaultSubobject<UHeroCombatComponent>(TEXT("HeroCombatComponent"));
+	HeroUIComponent = CreateDefaultSubobject<UHeroUIComponent>(TEXT("HeroUIComponent"));
 }
 
 UPawnCombatComponent* AMechHeroCharacter::GetPawnCombatComponent() const
 {
 	return HeroCombatComponent;
+}
+
+UPawnUIComponent* AMechHeroCharacter::GetPawnUIComponent() const
+{
+	return HeroUIComponent;
+}
+
+UHeroUIComponent* AMechHeroCharacter::GetHeroUIComponent() const
+{
+	return Super::GetHeroUIComponent();
 }
 
 void AMechHeroCharacter::PossessedBy(AController* NewController)
