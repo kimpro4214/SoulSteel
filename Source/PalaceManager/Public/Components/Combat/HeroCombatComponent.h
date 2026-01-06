@@ -13,7 +13,9 @@ UCLASS()
 class PALACEMANAGER_API UHeroCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void OnRegister() override;
 public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Mech|Combat")

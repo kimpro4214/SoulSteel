@@ -2,8 +2,16 @@
 
 
 #include "Components/Combat/EnemyCombatComponent.h"
-
+#include "MechGameplayTags.h"
 #include "MechDebugHelper.h"
+
+void UEnemyCombatComponent::OnRegister()
+{
+	Super::OnRegister();
+	
+	CurrentRightHandTag = MechGameplayTags::Enemy_Weapon;
+	CurrentLeftHandTag = MechGameplayTags::Enemy_WeaponSecondary;
+}
 
 void UEnemyCombatComponent::OnHitTargetActor(AActor* HitActor)
 {
