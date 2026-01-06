@@ -12,6 +12,7 @@
 class UMechAbilitySystemComponent;
 class UMechAttributeSet;
 class UDataAsset_StartUpDataBase;
+class UMotionWarpingComponent;
 UCLASS()
 class PALACEMANAGER_API AMechBaseCharacter : public ACharacter, public IAbilitySystemInterface, public IPawnCombatInterface, public IPawnUIInterface
 {
@@ -42,6 +43,9 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilitySystem")
 	UMechAttributeSet* MechAttributeSet;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "MotionWarping")
+	UMotionWarpingComponent* MotionWarpingComponent;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "CharacterData")
 	TSoftObjectPtr<UDataAsset_StartUpDataBase> CharacterStartupData;
