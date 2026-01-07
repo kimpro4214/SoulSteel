@@ -7,6 +7,7 @@
 #include "Interfaces/PawnCombatInterface.h"
 #include "GenericTeamAgentInterface.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "MechGameplayTags.h"
 
 UMechAbilitySystemComponent* UMechFunctionLibrary::NativeGetMechASCFromActor(AActor* InActor)
 {
@@ -106,5 +107,22 @@ FGameplayTag UMechFunctionLibrary::ComputeHitReactDirectionTag(AActor* InAttacke
 		OutAngleDifference *= -1.f;
 	}
 
-	return FGameplayTag();
+	if (OutAngleDifference>=-45.f && OutAngleDifference <=45.f)
+	{
+		return MechGameplayTags::Shared_Status_HitReact_Front;
+	}
+	else if (OutAngleDifference<-45.f && OutAngleDifference>=-135.f)
+	{
+		return MechGameplayTags::Shared_Status_HitReact_Left;
+	}
+	else if (OutAngleDifference<-135.f || OutAngleDifference>135.f)
+	{
+		return MechGameplayTags::Shared_Status_HitReact_Back;
+	}
+	else if(OutAngleDifference>45.f && OutAngleDifference<=135.f)
+	{
+		return MechGameplayTags::Shared_Status_HitReact_Right;
+	}
+
+	return MechGameplayTags::Shared_Status_HitReact_Front;
 }
