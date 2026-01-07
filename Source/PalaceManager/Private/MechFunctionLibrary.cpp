@@ -81,3 +81,8 @@ bool UMechFunctionLibrary::IsTargetPawnHostile(APawn* QueryPawn, APawn* TargetPa
 
 	return false;
 }
+
+float UMechFunctionLibrary::GetScalableFloatValueAtLevel(const FScalableFloat& InScalableFloat, float InLevel)
+{
+	return InScalableFloat.GetValueAtLevel(InLevel);
+}
