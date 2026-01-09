@@ -38,7 +38,7 @@ ETeamAttitude::Type AMechAIController::GetTeamAttitudeTowards(const AActor& Othe
 
 	const IGenericTeamAgentInterface* OtherTeamAgent = Cast<IGenericTeamAgentInterface>(PawnToCheck->GetController());
 
-	if (OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() != GetGenericTeamId())
+	if (OtherTeamAgent && OtherTeamAgent->GetGenericTeamId() < GetGenericTeamId())
 	{
 		return ETeamAttitude::Hostile;
 	}
@@ -72,11 +72,16 @@ void AMechAIController::BeginPlay()
 
 void AMechAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	if (Stimulus.WasSuccessfullySensed() && Actor)
-	{
+	{		
 		if (UBlackboardComponent* BlackboardComponent = GetBlackboardComponent())
 		{
-			BlackboardComponent->SetValueAsObject(FName("TargetActor"),Actor);
+			if (!BlackboardComponent->GetValueAsObject(FName("TargetActor")))
+			{
+				if (Stimulus.WasSuccessfullySensed() && Actor)
+				{
+					BlackboardComponent->SetValueAsObject(FName("TargetActor"),Actor);
+				}
+			}
 		}
 	}
 }

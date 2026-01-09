@@ -8,6 +8,14 @@
 #include "MechDebugHelper.h"
 #include "Items/Weapons/MechHeroWeapon.h"
 
+void UHeroCombatComponent::OnRegister()
+{
+	Super::OnRegister();
+	
+	CurrentRightHandTag = MechGameplayTags::Player_Weapon_Punch;
+	CurrentLeftHandTag = MechGameplayTags::Player_Weapon_PunchSecondary;
+}
+
 AMechHeroWeapon* UHeroCombatComponent::GetHeroCurrentEquippedWeapon() const
 {	
 	return Cast<AMechHeroWeapon>(GetCharacterCurrentEquippedWeapon());

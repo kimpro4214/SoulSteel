@@ -4,6 +4,7 @@
 #include "Characters/MechBaseCharacter.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
 #include "AbilitySystem/MechAttributeSet.h"
+#include "MotionWarpingComponent.h"
 
 // Sets default values
 AMechBaseCharacter::AMechBaseCharacter()
@@ -17,6 +18,8 @@ AMechBaseCharacter::AMechBaseCharacter()
 	MechAbilitySystemComponent = CreateDefaultSubobject<UMechAbilitySystemComponent>(TEXT("MechAbilitySystemComponent"));
 	
 	MechAttributeSet = CreateDefaultSubobject<UMechAttributeSet>(TEXT("MechAttributeSet"));
+	
+	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(TEXT("MotionWarpingComponent"));
 }
 
 UAbilitySystemComponent* AMechBaseCharacter::GetAbilitySystemComponent() const

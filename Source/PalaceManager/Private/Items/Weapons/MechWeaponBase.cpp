@@ -3,6 +3,7 @@
 
 #include "Items/Weapons/MechWeaponBase.h"
 #include "Components/BoxComponent.h"
+#include "MechFunctionLibrary.h"
 
 #include "MechDebugHelper.h"
 // Sets default values
@@ -31,7 +32,7 @@ void AMechWeaponBase::OnCollisionBoxBeginOverlap(UPrimitiveComponent* Overlapped
 	
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (WeaponOwningPawn != HitPawn)
+		if (UMechFunctionLibrary::IsTargetPawnHostile(WeaponOwningPawn,HitPawn))
 		{
 			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
@@ -49,9 +50,9 @@ void AMechWeaponBase::OnCollisionBoxEndOverlap(UPrimitiveComponent* OverlappedCo
 	
 	if (APawn* HitPawn = Cast<APawn>(OtherActor))
 	{
-		if (WeaponOwningPawn != HitPawn)
+		if (UMechFunctionLibrary::IsTargetPawnHostile(WeaponOwningPawn,HitPawn))
 		{
-			OnWeaponPulledFromTarget.ExecuteIfBound(OtherActor);
+			OnWeaponHitTarget.ExecuteIfBound(OtherActor);
 		}
 		
 		/**todo : implement hit check for enemy characters **/

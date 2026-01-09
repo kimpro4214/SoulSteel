@@ -59,11 +59,11 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
  	}
  	else if (ToggleDamageType == EToggleDamageType::LeftHand)
  	{
- 		WeaponToToggle = GetCharacterCarriedWeaponByTag(MechGameplayTags::Player_Weapon_PunchSecondary);
+ 		WeaponToToggle = GetCharacterCarriedWeaponByTag(CurrentLeftHandTag);
  	}
  	else if (ToggleDamageType == EToggleDamageType::RightHand)
  	{
- 		WeaponToToggle = GetCharacterCarriedWeaponByTag(MechGameplayTags::Player_Weapon_Punch);
+ 		WeaponToToggle = GetCharacterCarriedWeaponByTag(CurrentRightHandTag);
  	}
 
  	if (WeaponToToggle && WeaponToToggle->GetWeaponCollisionBox())

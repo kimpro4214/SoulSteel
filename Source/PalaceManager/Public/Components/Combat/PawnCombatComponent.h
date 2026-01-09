@@ -39,6 +39,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category= "Mech|Combat")
 	void ToggleWeaponCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType = EToggleDamageType::CurrentEquippedWeapon);
 	
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	FGameplayTag CurrentLeftHandTag;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	FGameplayTag CurrentRightHandTag;
+	
 	virtual void OnHitTargetActor(AActor* HitActor);
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);
 	

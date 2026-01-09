@@ -14,4 +14,9 @@ class PALACEMANAGER_API UEnemyCombatComponent : public UPawnCombatComponent
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void OnRegister() override;
+	
+public:
+	virtual void OnHitTargetActor(AActor* HitActor) override;
 };
