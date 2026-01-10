@@ -2,4 +2,25 @@
 
 
 #include "Components/UI/EnemyUIComponent.h"
+#include "Widgets/MechWidgetBase.h"
 
+void UEnemyUIComponent::RegisterEnemyDrawnWidget(UMechWidgetBase* InWidgetToRegister)
+{
+	EnemyDrawnWidgets.Add(InWidgetToRegister);
+}
+
+void UEnemyUIComponent::RemoveEnemyDrawnWidgetsIfAny()
+{
+	if (EnemyDrawnWidgets.IsEmpty())
+	{
+		return;
+	}
+
+	for (UMechWidgetBase* DrawnWidget : EnemyDrawnWidgets)
+	{
+		if (DrawnWidget)
+		{
+			DrawnWidget->RemoveFromParent();
+		}
+	}
+}
