@@ -14,7 +14,8 @@ enum class EToggleDamageType : uint8
 {
 	CurrentEquippedWeapon,
 	LeftHand,
-	RightHand
+	RightHand,
+	Mouth
 };
 /**
  * 
@@ -44,6 +45,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Combat")
 	FGameplayTag CurrentRightHandTag;
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	FGameplayTag CurrentMouseHandTag;
 	
 	virtual void OnHitTargetActor(AActor* HitActor);
 	virtual void OnWeaponPulledFromTargetActor(AActor* InteractedActor);

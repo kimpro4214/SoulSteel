@@ -65,6 +65,10 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
  	{
  		WeaponToToggle = GetCharacterCarriedWeaponByTag(CurrentRightHandTag);
  	}
+ 	else if (ToggleDamageType == EToggleDamageType::Mouth)
+ 	{
+ 		WeaponToToggle = GetCharacterCarriedWeaponByTag(CurrentMouseHandTag);
+ 	}
 
  	if (WeaponToToggle && WeaponToToggle->GetWeaponCollisionBox())
  	{

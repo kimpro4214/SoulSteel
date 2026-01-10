@@ -14,6 +14,7 @@ void UEnemyCombatComponent::OnRegister()
 	
 	CurrentRightHandTag = MechGameplayTags::Enemy_WeaponSecondary;
 	CurrentLeftHandTag = MechGameplayTags::Enemy_Weapon;
+	CurrentMouseHandTag = MechGameplayTags::Enemy_WeaponMouth;
 	
 	AMechEnemyCharacter* OwningEnemyCharacter = GetOwningPawn<AMechEnemyCharacter>();
 	if (OwningEnemyCharacter)
