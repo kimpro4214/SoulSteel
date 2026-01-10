@@ -87,3 +87,11 @@ void UPawnCombatComponent::ToggleWeaponCollision(bool bShouldEnable, EToggleDama
  void UPawnCombatComponent::OnWeaponPulledFromTargetActor(AActor* InteractedActor)
  {
  }
+
+ void UPawnCombatComponent::ToggleCurrentEquippedWeaponCollision(bool bShouldEnable)
+ {
+ }
+
+ void UPawnCombatComponent::ToggleBodyCollsionBoxCollision(bool bShouldEnable, EToggleDamageType ToggleDamageType)
+ {
+ }

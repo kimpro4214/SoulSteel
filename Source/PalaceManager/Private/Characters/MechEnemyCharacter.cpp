@@ -10,6 +10,7 @@
 #include "Components/WidgetComponent.h"
 #include "Widgets/MechWidgetBase.h"
 #include "Components/BoxComponent.h"
+#include "MechFunctionLibrary.h"
 #include "DataAssets/StartUpData/DataAsset_EnemyStartUpData.h"
 
 #include "MechDebugHelper.h"
@@ -72,6 +73,13 @@ void AMechEnemyCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& P
 void AMechEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                                          UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (UMechFunctionLibrary::IsTargetPawnHostile(this,HitPawn))
+		{
+			EnemyCombatComponent->OnHitTargetActor(HitPawn);
+		}
+	}
 }
 
 void AMechEnemyCharacter::InitEnemyStartUpData()
