@@ -11,7 +11,7 @@
 
 UAbilityTask_WaitSpawnEnemies* UAbilityTask_WaitSpawnEnemies::WaitSpawnEnemies(UGameplayAbility* OwningAbility,
 	FGameplayTag EventTag, TSoftClassPtr<AMechEnemyCharacter> SoftEnemyClassToSpawn, int32 NumToSpawn,
-	const FVector& SpawnOrigin, float RandomSpawnRadius, const FRotator& SpawnRoation)
+	const FVector& SpawnOrigin, float RandomSpawnRadius)
 {
 	UAbilityTask_WaitSpawnEnemies* Node = NewAbilityTask<UAbilityTask_WaitSpawnEnemies>(OwningAbility);
 	Node->CachedEventTag = EventTag;
@@ -19,7 +19,6 @@ UAbilityTask_WaitSpawnEnemies* UAbilityTask_WaitSpawnEnemies::WaitSpawnEnemies(U
 	Node->CachedNumToSpawn = NumToSpawn;
 	Node->CachedSpawnOrigin = SpawnOrigin;
 	Node->CachedRandomSpawnRadius = RandomSpawnRadius;
-	Node->CachedSpawnRoation = SpawnRoation;
 
 	return Node;
 }
@@ -89,8 +88,10 @@ void UAbilityTask_WaitSpawnEnemies::OnEnemyClassLoaded()
 
 		RandomLocation += FVector(0.f,0.f,150.f);
 
-		AMechEnemyCharacter* SpawnedEnemy = World->SpawnActor<AMechEnemyCharacter>(LoadedClass,RandomLocation,CachedSpawnRoation,SpawnParam);
+		const FRotator SpawnFacingRotation = AbilitySystemComponent->GetAvatarActor()->GetActorForwardVector().ToOrientationRotator();
 
+		AMechEnemyCharacter* SpawnedEnemy = World->SpawnActor<AMechEnemyCharacter>(LoadedClass,RandomLocation,SpawnFacingRotation,SpawnParam);
+		
 		if (SpawnedEnemy)
 		{
 			SpawnedEnemies.Add(SpawnedEnemy);
