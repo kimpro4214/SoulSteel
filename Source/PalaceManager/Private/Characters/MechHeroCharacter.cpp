@@ -13,6 +13,7 @@
 #include "DataAssets/StartUpData/DataAsset_HeroStartUpData.h"
 #include "Components/Combat/HeroCombatComponent.h"
 #include "AbilitySystem/MechAbilitySystemComponent.h"
+#include "AbilitySystem/MechAttributeSet.h"
 #include "Components/UI/HeroUIComponent.h"
 
 #include "MechDebugHelper.h"
@@ -58,6 +59,24 @@ UPawnUIComponent* AMechHeroCharacter::GetPawnUIComponent() const
 UHeroUIComponent* AMechHeroCharacter::GetHeroUIComponent() const
 {
 	return Super::GetHeroUIComponent();
+}
+
+void AMechHeroCharacter::HandleDeath()
+{
+	BP_OnDeath();
+}
+
+void AMechHeroCharacter::FullHeal()
+{
+	if (MechAbilitySystemComponent)
+	{
+		if (const UMechAttributeSet* AttributeSet = MechAbilitySystemComponent->GetSet<UMechAttributeSet>())
+		{
+			UMechAttributeSet* MutableAS = const_cast<UMechAttributeSet*>(AttributeSet);
+            
+			MutableAS->SetCurrentHealth(MutableAS->GetMaxHealth());
+		}
+	}
 }
 
 void AMechHeroCharacter::PossessedBy(AController* NewController)

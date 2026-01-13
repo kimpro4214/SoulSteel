@@ -33,6 +33,11 @@ public:
 	virtual UHeroUIComponent* GetHeroUIComponent() const override;
 	//~ End IPawnUIInterface Interface
 	
+	virtual void HandleDeath();
+	
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void FullHeal();
+	
 protected:
 	//~ Begin APawn Interface
 	virtual void PossessedBy(AController* NewController) override;
@@ -40,6 +45,10 @@ protected:
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	virtual void BeginPlay() override;	
+	
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void BP_OnDeath();
+	
 private:
 	
 #pragma region Components
