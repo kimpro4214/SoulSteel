@@ -38,6 +38,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void FullHeal();
 	
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void ServerRevive();
+
+	
 protected:
 	//~ Begin APawn Interface
 	virtual void PossessedBy(AController* NewController) override;

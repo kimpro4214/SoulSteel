@@ -68,14 +68,115 @@ void AMechHeroCharacter::HandleDeath()
 
 void AMechHeroCharacter::FullHeal()
 {
+    // 1. 체력 복구 (기존 로직 유지)
+    if (MechAbilitySystemComponent)
+    {
+       // const_cast는 위험할 수 있으니, 가능하면 AttributeSet 내부에 InitHealth() 같은 함수를 만드는 것을 권장합니다.
+       // 일단 현재 로직대로 유지합니다.
+       if (const UMechAttributeSet* AttributeSet = MechAbilitySystemComponent->GetSet<UMechAttributeSet>())
+       {
+          UMechAttributeSet* MutableAS = const_cast<UMechAttributeSet*>(AttributeSet);
+          MutableAS->SetCurrentHealth(MutableAS->GetMaxHealth());
+       }
+
+        // 2. [중요] 실행 중인 모든 어빌리티 취소 (공격/구르기 불가 해결)
+        // 죽음 어빌리티가 아직 Active 상태라면 다른 어빌리티(BlockAbilities 태그 때문)가 실행되지 않습니다.
+        // 이를 강제로 종료시킵니다.
+        MechAbilitySystemComponent->CancelAllAbilities();
+        
+        // 3. 태그 제거 (기존 로직 + GE로 적용된 태그도 제거)
+        // RemoveLooseGameplayTag는 수동으로 추가한 태그만 지웁니다.
+        // 만약 GameplayEffect로 인해 Dead 태그가 붙어있다면 아래 코드가 추가로 필요할 수 있습니다.
+        FGameplayTagContainer DeadTags;
+        DeadTags.AddTag(MechGameplayTags::Shared_Status_Dead);
+        
+        MechAbilitySystemComponent->RemoveActiveEffectsWithTags(DeadTags); // GE 제거
+        MechAbilitySystemComponent->RemoveLooseGameplayTag(MechGameplayTags::Shared_Status_Dead); // Loose 태그 제거
+    }
+
+    // 4. [중요] 애니메이션 몽타주 강제 정지 (캐릭터 굳음 해결)
+    if (GetMesh() && GetMesh()->GetAnimInstance())
+    {
+        // 현재 재생 중인 사망 몽타주를 0.2초에 걸쳐 자연스럽게 끕니다.
+        GetMesh()->GetAnimInstance()->StopAllMontages(0.2f);
+    }
+
+    // 5. [중요] 콜리전 및 움직임 복구 (AI 인식 불가 해결)
+    // 사망 시 Ragdoll(Physics)이나 NoCollision으로 변했다면 다시 Pawn으로 돌려놔야 AI가 인식합니다.
+    if (GetCapsuleComponent())
+    {
+        GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn")); // 혹은 프로젝트에 맞는 프리셋 이름
+    }
+
+    if (GetCharacterMovement())
+    {
+        // 움직임 모드를 다시 걷기로 변경
+        GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+        // 혹시 미끄러지거나 남아있는 가속도 제거
+        GetCharacterMovement()->StopMovementImmediately(); 
+    }
+
+    // 6. UI 업데이트 (기존 로직 유지)
+    if (HeroUIComponent && MechAbilitySystemComponent)
+    {
+       const float NewHealth =
+          MechAbilitySystemComponent->GetNumericAttribute(UMechAttributeSet::GetCurrentHealthAttribute());
+       const float MaxHealth =
+          MechAbilitySystemComponent->GetNumericAttribute(UMechAttributeSet::GetMaxHealthAttribute());
+
+       const float NewPercent = (MaxHealth > 0.f) ? (NewHealth / MaxHealth) : 0.f;
+       HeroUIComponent->BroadcastHealthPercent(NewPercent);
+    }
+}
+
+void AMechHeroCharacter::ServerRevive_Implementation()
+{
+	// 1. [중요] GAS 어빌리티 시스템 정리
+	if (MechAbilitySystemComponent)
+	{
+		// 죽음 어빌리티 강제 종료 (이걸 해야 'OnEndAbility'가 텅 빈 상태로 끝나서 상태가 초기화됨)
+		MechAbilitySystemComponent->CancelAllAbilities();
+
+		// 태그 제거
+		FGameplayTagContainer DeadTags;
+		DeadTags.AddTag(MechGameplayTags::Shared_Status_Dead);
+		MechAbilitySystemComponent->RemoveActiveEffectsWithTags(DeadTags);
+		MechAbilitySystemComponent->RemoveLooseGameplayTag(MechGameplayTags::Shared_Status_Dead);
+	}
+
+	// 2. [중요] 애니메이션 굳음 해결
+	if (GetMesh())
+	{
+		// 블루프린트에서 '애니 일시정지'를 썼다면 이걸 false로 해줘야 다시 움직입니다.
+		GetMesh()->bPauseAnims = false; 
+        
+		if (GetMesh()->GetAnimInstance())
+		{
+			// 몽타주 즉시 끄기 (Idle 상태로 복귀)
+			GetMesh()->GetAnimInstance()->StopAllMontages(0.0f);
+		}
+	}
+
+	// 3. 체력 100% 회복
 	if (MechAbilitySystemComponent)
 	{
 		if (const UMechAttributeSet* AttributeSet = MechAbilitySystemComponent->GetSet<UMechAttributeSet>())
 		{
 			UMechAttributeSet* MutableAS = const_cast<UMechAttributeSet*>(AttributeSet);
-            
 			MutableAS->SetCurrentHealth(MutableAS->GetMaxHealth());
 		}
+	}
+
+	// 4. 콜리전 복구 (AI가 다시 나를 보게 함)
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
+	}
+
+	// 5. 움직임 모드 복구
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	}
 }
 
