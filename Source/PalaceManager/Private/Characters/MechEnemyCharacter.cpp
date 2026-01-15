@@ -11,6 +11,7 @@
 #include "Widgets/MechWidgetBase.h"
 #include "Components/BoxComponent.h"
 #include "MechFunctionLibrary.h"
+#include "AbilitySystem/MechAttributeSet.h"
 #include "DataAssets/StartUpData/DataAsset_EnemyStartUpData.h"
 
 #include "MechDebugHelper.h"
@@ -117,9 +118,50 @@ UEnemyUIComponent* AMechEnemyCharacter::GetEnemyUIComponent() const
 	return EnemyUIComponent;
 }
 
+void AMechEnemyCharacter::InitBossFight()
+{
+	if (!bIsBoss) return;
+
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+    
+	// BossUIAbilityClass가 설정되어 있는지 확인
+	if (ASC && BossUIAbilityClass)
+	{
+		// 1. Spec 생성 (내 커스텀 클래스 기반)
+		FGameplayAbilitySpec Spec(BossUIAbilityClass, 1, INDEX_NONE, this);
+        
+		// 2. 어빌리티 부여 및 즉시 실행
+		// (GiveAbilityAndActivateOnce는 부모인 UGameplayAbilitySpec을 받으므로 호환됨)
+		ASC->GiveAbilityAndActivateOnce(Spec);
+	}
+}
+
+void AMechEnemyCharacter::ResetBossState()
+{
+	if (!bIsBoss) return;
+
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	if (ASC)
+	{
+		float MaxHP = ASC->GetNumericAttribute(UMechAttributeSet::GetMaxHealthAttribute());
+		ASC->SetNumericAttributeBase(UMechAttributeSet::GetCurrentHealthAttribute(), MaxHP);
+	}
+
+	if (EnemyUIComponent)
+	{
+		EnemyUIComponent->RemoveEnemyDrawnWidgetsIfAny();
+	}
+
+	SetActorLocation(StartingLocation);
+	SetActorRotation(StartingRotation);
+}
+
 void AMechEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	StartingLocation = GetActorLocation();
+	StartingRotation = GetActorRotation();
 	
 	if (UMechWidgetBase* HealthWidget = Cast<UMechWidgetBase>(EnemyHealthWidgetComponent->GetUserWidgetObject()))
 	{

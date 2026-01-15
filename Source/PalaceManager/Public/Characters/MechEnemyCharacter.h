@@ -6,6 +6,7 @@
 #include "Characters/MechBaseCharacter.h"
 #include "MechEnemyCharacter.generated.h"
 
+class UGameplayAbility;
 class UEnemyCombatComponent;
 class UEnemyUIComponent;
 class UWidgetComponent;
@@ -28,6 +29,18 @@ public:
 	virtual UPawnUIComponent* GetPawnUIComponent() const override;
 	virtual UEnemyUIComponent* GetEnemyUIComponent() const override;
 	//~ End IPawnUIInterface Interface
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boss Logic")
+	bool bIsBoss = false;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Boss Logic")
+	TSubclassOf<UGameplayAbility> BossUIAbilityClass;
+	
+	UFUNCTION(BlueprintCallable, Category = "Boss Logic")
+	void InitBossFight();
+
+	UFUNCTION(BlueprintCallable, Category = "Boss Logic")
+	void ResetBossState();
 	
 protected:
 	virtual void BeginPlay() override;
@@ -69,6 +82,9 @@ protected:
 
 private:
 	void InitEnemyStartUpData();
+	
+	FVector StartingLocation;
+	FRotator StartingRotation;
 	
 public:
 	FORCEINLINE UEnemyCombatComponent* GetEnemyCombatComponent() const { return EnemyCombatComponent; }
