@@ -9,6 +9,9 @@
 #include "Components/UI/EnemyUIComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Widgets/MechWidgetBase.h"
+#include "Components/BoxComponent.h"
+#include "MechFunctionLibrary.h"
+#include "AbilitySystem/MechAttributeSet.h"
 #include "DataAssets/StartUpData/DataAsset_EnemyStartUpData.h"
 
 #include "MechDebugHelper.h"
@@ -32,6 +35,16 @@ AMechEnemyCharacter::AMechEnemyCharacter()
 	
 	EnemyHealthWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("EnemyHealthWidgetComponent");
 	EnemyHealthWidgetComponent->SetupAttachment(GetMesh());
+	
+	LeftHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("LeftHandCollisionBox");
+	LeftHandCollisionBox->SetupAttachment(GetMesh());
+	LeftHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	LeftHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this,&ThisClass::OnBodyCollisionBoxBeginOverlap);
+
+	RightHandCollisionBox = CreateDefaultSubobject<UBoxComponent>("RightHandCollisionBox");
+	RightHandCollisionBox->SetupAttachment(GetMesh());
+	RightHandCollisionBox->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	RightHandCollisionBox->OnComponentBeginOverlap.AddUniqueDynamic(this,&ThisClass::OnBodyCollisionBoxBeginOverlap);
 }
 
 void AMechEnemyCharacter::PossessedBy(AController* NewController)
@@ -39,6 +52,35 @@ void AMechEnemyCharacter::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	 
 	InitEnemyStartUpData();
+}
+
+#if WITH_EDITOR
+void AMechEnemyCharacter::PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+	
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,LeftHandCollisionBoxAttachBoneName))
+	{
+		LeftHandCollisionBox->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale,LeftHandCollisionBoxAttachBoneName);
+	}
+
+	if (PropertyChangedEvent.GetMemberPropertyName() == GET_MEMBER_NAME_CHECKED(ThisClass,RightHandCollisionBoxAttachBoneName))
+	{
+		RightHandCollisionBox->AttachToComponent(GetMesh(),FAttachmentTransformRules::SnapToTargetNotIncludingScale,RightHandCollisionBoxAttachBoneName);
+	}
+}
+#endif
+ 
+void AMechEnemyCharacter::OnBodyCollisionBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                                         UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (APawn* HitPawn = Cast<APawn>(OtherActor))
+	{
+		if (UMechFunctionLibrary::IsTargetPawnHostile(this,HitPawn))
+		{
+			EnemyCombatComponent->OnHitTargetActor(HitPawn);
+		}
+	}
 }
 
 void AMechEnemyCharacter::InitEnemyStartUpData()
@@ -76,9 +118,50 @@ UEnemyUIComponent* AMechEnemyCharacter::GetEnemyUIComponent() const
 	return EnemyUIComponent;
 }
 
+void AMechEnemyCharacter::InitBossFight()
+{
+	if (!bIsBoss) return;
+
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+    
+	// BossUIAbilityClass가 설정되어 있는지 확인
+	if (ASC && BossUIAbilityClass)
+	{
+		// 1. Spec 생성 (내 커스텀 클래스 기반)
+		FGameplayAbilitySpec Spec(BossUIAbilityClass, 1, INDEX_NONE, this);
+        
+		// 2. 어빌리티 부여 및 즉시 실행
+		// (GiveAbilityAndActivateOnce는 부모인 UGameplayAbilitySpec을 받으므로 호환됨)
+		ASC->GiveAbilityAndActivateOnce(Spec);
+	}
+}
+
+void AMechEnemyCharacter::ResetBossState()
+{
+	if (!bIsBoss) return;
+
+	UAbilitySystemComponent* ASC = GetAbilitySystemComponent();
+	if (ASC)
+	{
+		float MaxHP = ASC->GetNumericAttribute(UMechAttributeSet::GetMaxHealthAttribute());
+		ASC->SetNumericAttributeBase(UMechAttributeSet::GetCurrentHealthAttribute(), MaxHP);
+	}
+
+	if (EnemyUIComponent)
+	{
+		EnemyUIComponent->RemoveEnemyDrawnWidgetsIfAny();
+	}
+
+	SetActorLocation(StartingLocation);
+	SetActorRotation(StartingRotation);
+}
+
 void AMechEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	StartingLocation = GetActorLocation();
+	StartingRotation = GetActorRotation();
 	
 	if (UMechWidgetBase* HealthWidget = Cast<UMechWidgetBase>(EnemyHealthWidgetComponent->GetUserWidgetObject()))
 	{

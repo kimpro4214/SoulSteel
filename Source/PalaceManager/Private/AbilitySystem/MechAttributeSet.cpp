@@ -5,6 +5,7 @@
 #include "GameplayEffectExtension.h"
 #include "MechFunctionLibrary.h"
 #include "MechGameplayTags.h"
+#include "Characters/MechHeroCharacter.h"
 #include "Interfaces/PawnUIInterface.h"
 #include "Components/UI/PawnUIComponent.h"
 #include "Components/UI/HeroUIComponent.h"
@@ -60,27 +61,24 @@ void UMechAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		const float OldHealth = GetCurrentHealth();
 		const float DamageDone = GetDamageTaken();
 
-		const float NewCurrentHealth = FMath::Clamp(OldHealth - DamageDone,0.f,GetMaxHealth());
+		const float NewCurrentHealth = FMath::Clamp(OldHealth - DamageDone, 0.f, GetMaxHealth());
 
 		SetCurrentHealth(NewCurrentHealth);
+        
+		SetDamageTaken(0.0f); 
 
-		/*const FString DebugString = FString::Printf(
-			TEXT("Old Health: %f, Damage Done: %f, NewCurrentHealth: %f"),
-			OldHealth,
-			DamageDone,
-			NewCurrentHealth
-		);
+		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
 
-		Debug::Print(DebugString,FColor::Green);*/
-		
-		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth()/GetMaxHealth());
-
-		//TODO::Notify the UI 
-
-		//TODO::Handle character death
-		if (GetCurrentHealth() == 0.f)
+		if (GetCurrentHealth() <= 0.0f) 
 		{
-			UMechFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(),MechGameplayTags::Shared_Status_Dead);
+			UMechFunctionLibrary::AddGameplayTagToActorIfNone(Data.Target.GetAvatarActor(), MechGameplayTags::Shared_Status_Dead);
+
+			AActor* AvatarActor = Data.Target.GetAvatarActor();
+            
+			if (AMechHeroCharacter* HeroCharacter = Cast<AMechHeroCharacter>(AvatarActor))
+			{
+				HeroCharacter->HandleDeath(); 
+			}
 		}
 	}
 	

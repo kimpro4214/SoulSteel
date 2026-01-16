@@ -18,4 +18,7 @@ class PALACEMANAGER_API UPawnUIComponent : public UPawnExtensionComponentBase
 public:
 	UPROPERTY(BlueprintAssignable)
 	FOnPercentChangedDelegate OnCurrentHealthChanged;
+	
+	UFUNCTION(BlueprintCallable)
+	void BroadcastHealthPercent(float NewPercent);
 };

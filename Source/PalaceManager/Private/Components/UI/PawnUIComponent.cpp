@@ -3,3 +3,7 @@
 
 #include "Components/UI/PawnUIComponent.h"
 
+void UPawnUIComponent::BroadcastHealthPercent(float NewPercent)
+{
+	OnCurrentHealthChanged.Broadcast(NewPercent);
+}

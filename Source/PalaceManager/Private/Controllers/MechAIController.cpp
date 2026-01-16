@@ -8,6 +8,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 #include "MechDebugHelper.h"
+
+
 AMechAIController::AMechAIController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>("PathFollowingComponent"))
 {
 	{
@@ -72,16 +74,26 @@ void AMechAIController::BeginPlay()
 
 void AMechAIController::OnEnemyPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	{		
-		if (UBlackboardComponent* BlackboardComponent = GetBlackboardComponent())
+	// 생성자 부분 (AMechAIController::AMechAIController)
+
+	AISenseConfig_Sight->SightRadius = 5000.f;
+
+	// [수정] LoseSightRadius를 SightRadius보다 500 정도 크게 잡으세요.
+	// 이렇게 하면 적이 5000 거리에서 발견되고, 5500 밖으로 나가야만 시야에서 사라집니다. (버벅임 방지)
+	AISenseConfig_Sight->LoseSightRadius = 5500.f;
+	
+	UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
+	if (BlackboardComponent && Actor)
+	{
+		// 성공적으로 감지했을 때만 타겟을 갱신합니다.
+		if (Stimulus.WasSuccessfullySensed())
 		{
-			if (!BlackboardComponent->GetValueAsObject(FName("TargetActor")))
-			{
-				if (Stimulus.WasSuccessfullySensed() && Actor)
-				{
-					BlackboardComponent->SetValueAsObject(FName("TargetActor"),Actor);
-				}
-			}
+			BlackboardComponent->SetValueAsObject(FName("TargetActor"), Actor);
 		}
+        
+		// [삭제] else { ... SetValue(Null) ... } 
+		// 놓쳤다고 해서 바로 지우지 마세요! 
+		// 죽었을 때 멈추는 건 이미 비헤이비어 트리(BT)의 데코레이터가 처리하고 있습니다.
+		// 여기서 지우면 장애물에 스치기만 해도 멈칫거립니다.
 	}
 }
