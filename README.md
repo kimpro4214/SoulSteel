@@ -1,6 +1,6 @@
 # Soul Steel — 액션 RPG
 
-> 기계화된 전사들이 격돌하는 궁전, 살아남아 진실에 닿아라
+> 기계화된 전사들이 격돌하는 실험실, 살아남아 진실에 닿아라
 
 **Soul Steel**은 Unreal Engine 5.4 기반의 3D 액션 RPG입니다.
 플레이어는 메크 전사를 조종해 적들을 처치하고, Gameplay Ability System(GAS)으로 구동되는 다양한 스킬과 무기를 활용해 전투를 이어갑니다.
@@ -267,7 +267,6 @@ RiderLink 플러그인을 통한 Live Coding도 지원합니다.
 | Space | 점프 |
 | LMB | 일반 공격 |
 | RMB | 강공격 / 스킬 |
-| 1 ~ 4 | 무기 전환 |
 | ESC | 인게임 메뉴 |
 
 ---
